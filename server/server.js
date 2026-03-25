@@ -34,10 +34,27 @@ const corsOptions = {
 app.use(cors(corsOptions)); // Handles preflight OPTIONS automatically
 app.use(express.json());
 
-// Connect DB (we catch error globally or use mock connection for MVP if env missing)
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/agrilinked')
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+// Connect DB
+const connectDB = async () => {
+  try {
+    let mongoURI = process.env.MONGO_URI;
+    
+    if (!mongoURI) {
+      console.log('No MONGO_URI found, initializing mongodb-memory-server...');
+      const { MongoMemoryServer } = require('mongodb-memory-server');
+      const mongod = await MongoMemoryServer.create();
+      mongoURI = mongod.getUri();
+    }
+
+    await mongoose.connect(mongoURI);
+    console.log('MongoDB Connected successfully!');
+  } catch (err) {
+    console.error('MongoDB connection error:', err.message);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 // Define Routes
 app.use('/api/auth', require('./routes/auth'));
