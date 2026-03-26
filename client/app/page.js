@@ -25,10 +25,10 @@ export default function Home() {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/register?role=farmer" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-green-500/30 flex items-center justify-center gap-2">
+          <Link href="/feed" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-green-500/30 flex items-center justify-center gap-2">
             Hire Labor <ArrowRight className="w-5 h-5" />
           </Link>
-          <Link href="/register?role=laborer" className="bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-sm flex items-center justify-center gap-2">
+          <Link href="/feed" className="bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-sm flex items-center justify-center gap-2">
             Find Work
           </Link>
         </div>

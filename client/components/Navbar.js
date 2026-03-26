@@ -36,7 +36,6 @@ export default function Navbar() {
           </Link>
           
           <div className="hidden md:flex space-x-6 items-center">
-            {isLogged ? (
               <>
                 <Link href="/feed" className="text-sm font-medium text-slate-600 hover:text-green-600">Home</Link>
                 <Link href="/jobs" className="text-sm font-medium text-slate-600 hover:text-green-600">Jobs</Link>
@@ -55,13 +54,6 @@ export default function Navbar() {
                   <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=Felix`} alt="Profile" className="w-full h-full object-cover" />
                 </div>
               </>
-            ) : (
-              <>
-                <Link href="/register" className="text-sm font-semibold bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors shadow-sm">
-                  Join Now
-                </Link>
-              </>
-            )}
           </div>
 
           <div className="md:hidden flex items-center">

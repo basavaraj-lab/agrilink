@@ -18,10 +18,11 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const currentUser = JSON.parse(localStorage.getItem('user'));
+        let currentUser = JSON.parse(localStorage.getItem('user'));
         if (!currentUser) {
-          router.push('/register');
-          return;
+          currentUser = { _id: "650c90c9b0101b0000000001", name: "Guest User", role: "farmer", profile: {} };
+          localStorage.setItem('user', JSON.stringify(currentUser));
+          localStorage.setItem('token', 'guest_token');
         }
         setUser(currentUser);
         
