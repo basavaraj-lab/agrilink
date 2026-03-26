@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const { Server } = require('socket.io');
+const Message = require('./models/Message');
 
 dotenv.config();
 
@@ -59,6 +60,10 @@ connectDB();
 // Define Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/jobs', require('./routes/jobs'));
+app.use('/api/posts', require('./routes/posts'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/search', require('./routes/search'));
+app.use('/api/messages', require('./routes/messages'));
 
 // Setup Socket.io
 io.on('connection', (socket) => {
@@ -69,8 +74,15 @@ io.on('connection', (socket) => {
     console.log(`User ${userId} joined their room`);
   });
 
-  socket.on('sendMessage', ({ senderId, receiverId, content }) => {
-    io.to(receiverId).emit('message', { senderId, content });
+  socket.on('sendMessage', async ({ senderId, receiverId, content }) => {
+    try {
+      const newMsg = new Message({ senderId, receiverId, content });
+      await newMsg.save();
+      io.to(receiverId).emit('message', newMsg);
+      socket.emit('messageSent', newMsg);
+    } catch (err) {
+      console.error('Error saving message:', err);
+    }
   });
 
   socket.on('disconnect', () => {

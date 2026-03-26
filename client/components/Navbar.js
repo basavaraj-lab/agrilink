@@ -9,9 +9,12 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Just a placeholder for auth logic
-    const token = localStorage.getItem('token');
-    setIsLogged(!!token);
+    // Defer state update to avoid cascading render lint warning
+    const timer = setTimeout(() => {
+      const token = localStorage.getItem('token');
+      setIsLogged(!!token);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   const handleLogout = () => {
@@ -35,12 +38,12 @@ export default function Navbar() {
           <div className="hidden md:flex space-x-6 items-center">
             {isLogged ? (
               <>
-                <Link href="/dashboard" className="text-sm font-medium text-slate-600 hover:text-green-600">Home</Link>
+                <Link href="/feed" className="text-sm font-medium text-slate-600 hover:text-green-600">Home</Link>
                 <Link href="/jobs" className="text-sm font-medium text-slate-600 hover:text-green-600">Jobs</Link>
                 <Link href="/network" className="text-sm font-medium text-slate-600 hover:text-green-600">Network</Link>
-                <button className="text-slate-400 hover:text-slate-600 transition-colors">
+                <Link href="/messages" className="text-slate-400 hover:text-slate-600 transition-colors">
                   <MessageSquare className="w-5 h-5" />
-                </button>
+                </Link>
                 <button className="text-slate-400 hover:text-slate-600 transition-colors relative">
                   <Bell className="w-5 h-5" />
                   <span className="absolute -top-1 -right-1 flex h-3 w-3">

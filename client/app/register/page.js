@@ -5,8 +5,9 @@ import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import api from '../../utils/api';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-export default function Register() {
+function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialRole = searchParams.get('role') || 'laborer';
@@ -133,5 +134,13 @@ export default function Register() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function Register() {
+  return (
+    <Suspense fallback={<div className="min-h-[85vh] flex items-center justify-center py-8"><div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div></div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }

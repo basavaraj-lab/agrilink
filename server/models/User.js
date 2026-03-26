@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: { type: String, required: true },
   
+  connections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  profileImage: { type: String, default: '' },
+  coverImage: { type: String, default: '' },
+  
   // Profile specific info stored inside one object
   profile: {
     // Laborer specific
