@@ -6,22 +6,35 @@ import api from '../utils/api';
 export default function CreatePost({ user, onPostCreated }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState('');
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    if (!text.trim() && !image) return;
     
     setLoading(true);
     try {
       // Extract hashtags using a simple regex
-      const hashtags = text.match(/#[a-z0-9]+/gi)?.map(tag => tag.slice(1).toLowerCase()) || [];
+      const hashtags = text.match(/#[a-z0-9_]+/gi)?.map(tag => tag.slice(1).toLowerCase()) || [];
       
       const res = await api.post('/posts', {
         text,
-        hashtags
+        hashtags,
+        image
       });
       
       setText('');
+      setImage('');
       if (onPostCreated) onPostCreated(res.data);
     } catch (err) {
       console.error(err);
@@ -55,12 +68,26 @@ export default function CreatePost({ user, onPostCreated }) {
             className="w-full resize-none border-none outline-none focus:ring-0 bg-transparent text-slate-800 placeholder-slate-400 text-lg sm:text-base mb-2"
           ></textarea>
           
+          {image && (
+            <div className="relative mb-3 rounded-xl overflow-hidden border border-slate-100 bg-slate-50">
+              <button 
+                type="button" 
+                onClick={() => setImage('')} 
+                className="absolute top-2 right-2 bg-gray-900/60 hover:bg-gray-900 text-white p-1.5 rounded-full transition-colors z-10"
+              >
+                &times;
+              </button>
+              <img src={image} alt="Preview" className="w-full max-h-80 object-cover" />
+            </div>
+          )}
+
           <div className="border-t border-slate-100 pt-3 flex justify-between items-center mt-2">
             <div className="flex gap-2 sm:gap-4 text-slate-500">
-              <button type="button" className="flex items-center gap-2 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors text-sm font-medium">
+              <label className="flex items-center gap-2 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors text-sm font-medium cursor-pointer">
                 <ImageIcon className="w-5 h-5 text-blue-500" />
                 <span className="hidden sm:inline">Media</span>
-              </button>
+                <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+              </label>
               <button type="button" className="flex items-center gap-2 hover:bg-slate-50 px-3 py-2 rounded-lg transition-colors text-sm font-medium">
                 <Video className="w-5 h-5 text-emerald-500" />
                 <span className="hidden sm:inline">Video</span>
@@ -72,7 +99,7 @@ export default function CreatePost({ user, onPostCreated }) {
             </div>
             <button 
               type="submit" 
-              disabled={!text.trim() || loading}
+              disabled={(!text.trim() && !image) || loading}
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-full font-semibold text-sm transition-all disabled:opacity-50 shadow-sm"
             >
               Post

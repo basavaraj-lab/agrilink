@@ -51,22 +51,17 @@ export default function PostCard({ post, currentUserId, onLike, onComment }) {
       </div>
 
       {/* Content */}
-      <div className="mb-4">
-        <p className="text-slate-800 leading-relaxed whitespace-pre-wrap">{post.text}</p>
-        
-        {post.hashtags && post.hashtags.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-2">
-            {post.hashtags.map((tag, idx) => (
-              <span key={idx} className="text-emerald-600 text-sm font-medium cursor-pointer hover:underline">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
+      <div className="mb-4 text-slate-800 leading-relaxed whitespace-pre-wrap">
+        {post.text.split(/(#[a-z0-9_]+)/gi).map((part, i) => {
+          if (part.match(/#[a-z0-9_]+/i)) {
+            return <span key={i} className="text-blue-600 font-medium hover:underline cursor-pointer">{part}</span>;
+          }
+          return part;
+        })}
 
         {post.image && (
-          <div className="mt-4 rounded-xl overflow-hidden border border-slate-100 max-h-96">
-            <img src={post.image} alt="Post content" className="w-full h-full object-cover" />
+          <div className="mt-4 rounded-xl overflow-hidden border border-slate-100 max-h-[500px]">
+            <img src={post.image} alt="Post content" className="w-full h-full object-contain bg-slate-50" />
           </div>
         )}
       </div>
