@@ -57,9 +57,6 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link href="/login" className="text-sm font-semibold text-slate-600 hover:text-slate-900">
-                  Log in
-                </Link>
                 <Link href="/register" className="text-sm font-semibold bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors shadow-sm">
                   Join Now
                 </Link>

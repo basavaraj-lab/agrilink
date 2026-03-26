@@ -129,9 +129,7 @@ function RegisterForm() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-slate-500">
-          Already have an account? <Link href="/login" className="text-green-600 font-semibold hover:underline">Log in</Link>
-        </div>
+
       </motion.div>
     </div>
   );

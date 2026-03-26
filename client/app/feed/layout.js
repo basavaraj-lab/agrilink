@@ -17,7 +17,7 @@ export default function FeedLayout({ children }) {
         setUser(res.data);
       } catch (err) {
         console.error('Failed to fetch user:', err);
-        router.push('/login');
+        router.push('/register');
       } finally {
         setLoading(false);
       }

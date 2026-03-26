@@ -20,7 +20,7 @@ export default function Dashboard() {
       try {
         const currentUser = JSON.parse(localStorage.getItem('user'));
         if (!currentUser) {
-          router.push('/login');
+          router.push('/register');
           return;
         }
         setUser(currentUser);
